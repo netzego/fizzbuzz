@@ -7,7 +7,7 @@ LDFLAGS  := -lcheck
 SRC_DIR	 := src
 SRC		 := $(wildcard $(SRC_DIR)/*.c)
 TEST	 := $(filter-out %/main.c, $(wildcard **/*.c))
-HEADER  := $(wildcard $(SRC_DIR)/*.h)
+HEADER   := $(wildcard $(SRC_DIR)/*.h)
 
 $(BIN):
 	@mkdir -p $(BIN)
