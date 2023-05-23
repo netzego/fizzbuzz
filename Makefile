@@ -5,8 +5,9 @@ CHECK	 := $(BIN)/test_$(PROGNAME)
 CFLAGS   := -Wall -Wextra -O2 -std=c99 -pedantic -g
 LDFLAGS  := -lcheck
 SRC_DIR	 := src
+TEST_DIR := tests
 SRC		 := $(wildcard $(SRC_DIR)/*.c)
-TEST	 := $(filter-out %/main.c, $(wildcard **/*.c))
+TEST	 := $(filter-out $(SRC_DIR)/main.c, $(wildcard $(TEST_DIR)/*.c) $(SRC))
 HEADER   := $(wildcard $(SRC_DIR)/*.h)
 
 $(BIN):
@@ -26,13 +27,15 @@ run: $(TARGET)
 	@./$^
 
 watch_run: $(TARGET)
-	@ls $(SRC) $(HEADER) | entr -c $(MAKE) --no-print-directory run
+	@ls $(SRC) $(HEADER) $(TEST) \
+		| entr -c $(MAKE) --no-print-directory run
 
 test: $(CHECK)
 	@./$(CHECK)
 
 watch_test: $(TARGET)
-	@ls $(SRC) $(HEADER) $(TEST) | entr -c $(MAKE) --no-print-directory test
+	@ls $(SRC) $(HEADER) $(TEST) \
+		| entr -c $(MAKE) --no-print-directory test
 
 .PHONY : \
 	clean \
